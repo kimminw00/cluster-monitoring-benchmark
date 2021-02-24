@@ -34,4 +34,4 @@ To run Query2, run:
 ## Running Data-Generator
   
 To run data-generator, run:  
-<code>java -jar ASSEMBLED_JAR_PATH --config-filename FILE_NAME</code>
+<code>java -jar ASSEMBLED_JAR_PATH --config-filename config.properties</code>
