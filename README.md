@@ -24,11 +24,11 @@ Benchmark and data-generator are built using Apache Maven. To build benchmark an
 ## Running Benchmark
 
 To run Query1, run:  
-<code>./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED-JAR-PATH 
+<code>./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED_JAR_PATH 
 --query-name q1 --config-filename config.properties</code> 
 
 To run Query2, run:  
-<code>./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED-JAR-PATH
+<code>./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED_JAR_PATH
 --query-name q2 --config-filename config.properties</code> 
 
 ## Running Data-Generator
