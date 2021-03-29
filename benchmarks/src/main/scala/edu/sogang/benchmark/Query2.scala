@@ -17,7 +17,7 @@ class Query2 extends QueryBase {
       .withWatermark("timestamp", "1 minutes")
       .groupBy(
         window(col("timestamp"), "60 seconds", "1 seconds"),
-        col("task_event.jobId")
+        col("task_event.jobId").as("jobId")
       ).agg(
         max("key").as("key"),
         avg("task_event.cpu").as("avgCpu")
@@ -27,6 +27,7 @@ class Query2 extends QueryBase {
         to_json(
           struct(
             col("window"),
+            col("jobId"),
             col("avgCpu"))
         ).as("value")
       )

@@ -16,7 +16,7 @@ class Query1 extends QueryBase {
       .withWatermark("timestamp", "1 minutes")
       .groupBy(
         window(col("timestamp"), "60 seconds", "1 seconds"),
-        col("task_event.category")
+        col("task_event.category").as("category")
       ).agg(
         max("key").as("key"),
         sum("task_event.cpu").as("totalCpu")
@@ -26,6 +26,7 @@ class Query1 extends QueryBase {
         to_json(
           struct(
             col("window"),
+            col("category"),
             col("totalCpu"))
         ).as("value")
       )
