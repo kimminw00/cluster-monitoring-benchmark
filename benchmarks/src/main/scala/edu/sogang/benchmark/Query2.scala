@@ -1,7 +1,7 @@
 package edu.sogang.benchmark
 
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{avg, col, from_csv, window}
+import org.apache.spark.sql.functions.{avg, col, from_csv, max, struct, to_json, window}
 
 
 class Query2 extends QueryBase {
@@ -14,11 +14,22 @@ class Query2 extends QueryBase {
         col("timestamp"))
       .where("task_event.eventType == 1")
       .dropDuplicates("key", "timestamp")
-      .withWatermark("timestamp", "5 minutes")
+      .withWatermark("timestamp", "1 minutes")
       .groupBy(
-        window(col("timestamp"), "60 seconds", "3 seconds"),
+        window(col("timestamp"), "60 seconds", "1SS seconds"),
         col("task_event.jobId")
-      ).agg(avg("task_event.cpu").as("avgCpu"))
+      ).agg(
+        max("key").as("key"),
+        avg("task_event.cpu").as("avgCpu")
+      )
+      .select(
+        col("key"),
+        to_json(
+          struct(
+            col("window"),
+            col("avgCpu"))
+        ).as("value")
+      )
 
   }
 }

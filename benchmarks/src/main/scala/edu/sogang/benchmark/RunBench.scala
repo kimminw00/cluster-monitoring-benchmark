@@ -59,6 +59,7 @@ object RunBench {
         Class.forName("org.apache.spark.sql.types.StructType"),
         Class.forName("org.apache.spark.sql.types.StructField"),
         Class.forName("[Lorg.apache.spark.sql.catalyst.InternalRow;"),
+        Class.forName("org.apache.spark.sql.kafka010.KafkaDataWriterCommitMessage$"),
         Class.forName("org.apache.spark.sql.execution.streaming.sources.PackedRowCommitMessage"),
         Class.forName("org.apache.spark.sql.execution.datasources.v2.DataWritingSparkTaskResult"),
 //        Class.forName("com.datastax.spark.connector.datasource.CassandraCommitMessage"),
@@ -66,7 +67,7 @@ object RunBench {
     )
 
     val ss = SparkSession.builder
-      .master("local[*]")
+//      .master("local[*]")
       .config(conf)
       .getOrCreate()
 
@@ -86,7 +87,8 @@ object RunBench {
     }
 
     // kafka config
-    val topic = prop.get("topic").asInstanceOf[String]
+    val sourceTopic = prop.get("sourceTopic").asInstanceOf[String]
+    val sinkTopic = prop.get("sinkTopic").asInstanceOf[String]
     val brokers = prop.get("brokers").asInstanceOf[String]
     val sinkCompressionType = prop.get("sinkCompressionType").asInstanceOf[String]
     val startingOffsets = prop.get("startingOffsets").asInstanceOf[String]
@@ -104,7 +106,7 @@ object RunBench {
     val df = ss.readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", brokers)
-      .option("subscribe", topic)
+      .option("subscribe", sourceTopic)
       .option("enable.auto.commit", autoCommitOpt)
       .option("startingOffsets", startingOffsets)
       .option("maxOffsetsPerTrigger", maxOffsetsPerTrigger)
@@ -112,14 +114,29 @@ object RunBench {
 
     val resultDf = query.runQuery(df)
 
-    resultDf.writeStream
-      .format("console")
+    // console
+//    resultDf.writeStream
+//      .format("console")
+//      .queryName("cluster-monitoring-benchmark-" + parsedArgs('queryName))
+//      .option("checkpointLocation", checkpointDir)
+//      .option("truncate", "false")
+//      .start()
+//      .awaitTermination()
+
+    // kafka
+    resultDf
+      .writeStream
+      .format("kafka")
       .queryName("cluster-monitoring-benchmark-" + parsedArgs('queryName))
+      .outputMode("append")
       .option("checkpointLocation", checkpointDir)
-      .option("truncate", "false")
+      .option("kafka.bootstrap.servers", brokers)
+      .option("topic", sinkTopic)
+      .option("kafka.compression.type", sinkCompressionType)
       .start()
       .awaitTermination()
 
+    // cassandra
 //      resultDf
 //        .writeStream
 //        .queryName("cluster-monitoring-benchmark-" + parsedArgs('queryName))
