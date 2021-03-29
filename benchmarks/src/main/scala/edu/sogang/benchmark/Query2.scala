@@ -16,7 +16,7 @@ class Query2 extends QueryBase {
       .dropDuplicates("key", "timestamp")
       .withWatermark("timestamp", "1 minutes")
       .groupBy(
-        window(col("timestamp"), "60 seconds", "1SS seconds"),
+        window(col("timestamp"), "60 seconds", "1 seconds"),
         col("task_event.jobId")
       ).agg(
         max("key").as("key"),
