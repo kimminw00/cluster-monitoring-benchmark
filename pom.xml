@@ -24,6 +24,7 @@
         <spark.version>3.0.1</spark.version>
         <kafka.version>2.7.0</kafka.version>
         <scala.version>2.12.10</scala.version>
+        <scala.binary.version>2.12</scala.binary.version>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
