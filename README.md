@@ -17,21 +17,29 @@ If you need more information, then you have to check [this paper.](https://dl.ac
   
 ## Build Process
   
-Benchmark and data-generator are built using Apache Maven. To build benchmark and data-generator, run: 
-  
-<code>mvn clean package</code>
+Benchmark and data-generator are built using Apache Maven.   
+To build benchmark and data-generator, run:
+```
+mvn clean package
+```
 
 ## Running Benchmark
 
 To run Query1, run:  
-<code>./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED_JAR_PATH 
---query-name q1 --config-filename config.properties</code> 
+```
+./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED_JAR_PATH \
+  --query-name q1 --config-filename config.properties
+```
 
 To run Query2, run:  
-<code>./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED_JAR_PATH
---query-name q2 --config-filename config.properties</code> 
+```
+./bin/spark-submit --class edu.sogang.benchmark.RunBench ASSEMBLED_JAR_PATH \
+  --query-name q2 --config-filename config.properties
+```
 
 ## Running Data-Generator
   
 To run data-generator, run:  
-<code>java -jar ASSEMBLED_JAR_PATH --config-filename config.properties</code>
+```
+java -jar ASSEMBLED_JAR_PATH --config-filename config.properties
+```
