@@ -71,9 +71,6 @@ object RunBench {
       .config(conf)
       .getOrCreate()
 
-    val sc = ss.sparkContext
-    sc.setLogLevel("WARN")
-
     val prop = new Properties()
     val inputSteam = this.getClass.getClassLoader.getResourceAsStream(parsedArgs('confFileName).toString)
 
